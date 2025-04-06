@@ -28,9 +28,11 @@ use App\Http\Controllers\UserMenuController;
 use App\Http\Controllers\UserPeraturanController;
 use App\Http\Controllers\UserNotifikasiController;
 use App\Http\Controllers\UserKomplainController;
+use Illuminate\Support\Facades\Auth;
 
-
-Route::get('/', function () { return view('welcome'); });
+Route::get('/', function () {
+    return view('welcome');
+});
 
 Auth::routes();
 
@@ -43,7 +45,7 @@ Route::get('/admin/login', [AdminLoginController::class, 'showLoginForm'])->name
 Route::post('/admin/login', [AdminLoginController::class, 'login'])->name('admin.login.submit');
 Route::middleware('auth:admin')->get('/home', [HomeController::class, 'index'])->name('home');
 
-Route::group(['middleware' => ['auth:admin', 'verified']], function(){
+Route::group(['middleware' => ['auth:admin', 'verified']], function () {
     Route::resource('admin/kategori', KategoriController::class);
     Route::get('/kategori/search', [KategoriController::class, 'search']);
     Route::get('/admin/kategori/{id}/edit', [KategoriController::class, 'edit']);
@@ -99,7 +101,7 @@ Route::get('/sejarah', [App\Http\Controllers\SejarahController::class, 'index'])
 Route::middleware('auth:web')->get('/welcomeUser', [WelcomeUserController::class, 'index'])->name('welcomeUser');
 
 // Akses Penuh Halaman User
-Route::group(['middleware' => ['auth:web', 'verified']], function(){
+Route::group(['middleware' => ['auth:web', 'verified']], function () {
     Route::resource('welcomeUser', WelcomeUserController::class);
     Route::get('/welcomeUser', [App\Http\Controllers\WelcomeUserController::class, 'index'])->name('welcomeUser');
     Route::get('/getHargaKamar/{id}', [KamarController::class, 'getHargaKamar']);
